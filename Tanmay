@@ -1,0 +1,51 @@
+clc;
+ close all;
+ clear all;
+ a=imread('pout.tif');
+ subplot(2,2,1);
+  imshow(a);
+ title('original image');
+ a=double(a);
+ [r c]=size(a);
+ h=zeros(1,256);
+  z=zeros(1,256);
+ big=max(max(a));
+  for i=1:r
+    for j=1:c
+         t=a(i,j);
+       h(t)=h(t)+1;
+  end;
+ end;
+ subplot(2,2,2);
+ bar(h);
+ title('original image histogram');
+ PDF=h/(r*c);
+ CDF(1)=PDF(1);
+ 
+     for x=2:big
+        CDF(x)=PDF(x)+CDF(x-1);
+ end;
+  new=CDF*big;
+ new1=round(new);
+ for p=1:r
+ for q=1:c
+  temp=a(p,q);
+  b(p,q)=new1(temp);
+  end;
+ end;
+  for i=1:r
+ for j=1:c
+ t=b(i,j);
+ if t==0
+ t=1;
+end;
+  z(t)=z(t)+1;
+ end;
+  end;
+ subplot(2,2,3);
+bar(z);
+ title('equalised image histogram');
+ subplot(2,2,4);
+ imshow(uint8(b));
+  title('equalised image');
+
